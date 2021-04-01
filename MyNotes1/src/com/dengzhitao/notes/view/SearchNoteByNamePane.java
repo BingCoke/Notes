@@ -64,6 +64,7 @@ public class SearchNoteByNamePane {
         return root;
     }
 
+    //搜索按钮点击后显示搜索结果
     private class SearchStart implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -85,7 +86,7 @@ public class SearchNoteByNamePane {
         }
     }
 
-
+    //listview的点击事件打开笔记
     private class ViewClick implements EventHandler<MouseEvent>{
         @Override
         public void handle(MouseEvent event) {
@@ -97,6 +98,8 @@ public class SearchNoteByNamePane {
         }
     }
 
+
+    //点击事件后按照时间顺序排序
     private class DateClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -112,7 +115,7 @@ public class SearchNoteByNamePane {
         }
     }
 
-
+    //按照点赞顺序排序
     private  class LikeClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {

@@ -154,15 +154,14 @@ public class NoteStage {
         public void handle(MouseEvent event) {
             LikesDao likesDao = new LikesDao();
             if( !like.isSelected()){
-
+                likesDao.add(new Likes(note.getId(),reader.getId()));
+                count++;
+            }else {
                 List<Likes> likesList = likesDao.selectExact(Likes.class,"userId",reader.getId());
                 for (Likes likes : likesList) {
                     likesDao.remove(likes);
                 }
-                count++;
-            }else {
 
-                likesDao.add(new Likes(note.getId(),reader.getId()));
                 count--;
             }
             likeCount.setText("点赞数：" + String.valueOf(count));

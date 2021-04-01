@@ -35,12 +35,13 @@ public class UserDao extends BaseDaoImpl<User> {
         Connection connection = JdbcUtil.connection;
         PreparedStatement preparedStatement  = null;
         ResultSet resultSet = null;
-        String sql = "SELECT count(id) count from likes WHERE note_id="+ user.getId() +" and note_id=" + note.getGroupId();
+        String sql = "SELECT count(id) count from likes WHERE note_id="+ user.getId() +" and note_id=" + note.getId();
         try {
             preparedStatement = connection.prepareStatement(sql);
             resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()) {
-                return true;
+            resultSet.next();
+            if(resultSet.getInt("count") == 0){
+                return false;
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -48,6 +49,6 @@ public class UserDao extends BaseDaoImpl<User> {
             JdbcUtil.close(preparedStatement,resultSet);
         }
 
-        return false;
+        return true;
     }
 }

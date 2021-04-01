@@ -17,12 +17,12 @@ import javafx.stage.Stage;
  * 小窗口类 自定义小窗口文字
  * @author Z
  */
-public class TextWindow  {
+public class TextWindow  extends Application{
 
 
-
+    private static Stage stage ;
     public static Stage textWindow(String text){
-        Stage stage = new Stage();
+        TextWindow.stage = new Stage();
         Button button = new Button("确认");
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -44,5 +44,14 @@ public class TextWindow  {
         stage.setScene(new Scene(borderPane,100,60));
         stage.show();
         return stage;
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        TextWindow.textWindow("ff").show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }
