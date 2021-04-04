@@ -152,7 +152,7 @@ public class MyRepositoryPane {
         public void handle(MouseEvent event) {
             int i = noteView.getSelectionModel().getSelectedIndex();
             if(i == -1){return;}
-            Stage stage = NoteStage.showNote(reader,notes.get(i),0);
+            Stage stage = NoteStageForImg.showNote(reader,notes.get(i),"save");
             stage.show();
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override
@@ -209,7 +209,7 @@ public class MyRepositoryPane {
             int j = repositoryView.getSelectionModel().getSelectedIndex();
             if(j == -1){ return; }
 
-            Stage stage = NoteStage.showNote(master,new Note(noteHandle.getId(),"","",1,repositories.get(j).getId(),noteGroups.get(i).getId()),1);
+            Stage stage = NoteStageForImg.showNote(master,new Note(noteHandle.getId(),"",1,0,1,repositories.get(j).getId(),noteGroups.get(i).getId()),"add");
             stage.show();
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override

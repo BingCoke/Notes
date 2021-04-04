@@ -94,7 +94,7 @@ public class SearchNoteByNamePane {
             if (i == -1){
                 return;
             }
-            NoteStage.showNote(reader,noteList.get(i),0).show();
+            NoteStageForImg.showNote(reader,noteList.get(i),"save").show();
         }
     }
 

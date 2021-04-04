@@ -1,9 +1,6 @@
 package com.dengzhitao.notes.service;
 
-import com.dengzhitao.notes.dao.LikesDao;
-import com.dengzhitao.notes.dao.NoteDao;
-import com.dengzhitao.notes.dao.RepositoryDao;
-import com.dengzhitao.notes.dao.UserDao;
+import com.dengzhitao.notes.dao.*;
 import com.dengzhitao.notes.entity.*;
 
 import java.util.*;
@@ -14,6 +11,7 @@ public class NoteHandle implements Handle<Note> {
     private RepositoryDao repositoryDao = new RepositoryDao();
     private RepositoryHandle repositoryHandle = new RepositoryHandle();
     private UserDao userDao = new UserDao();
+    private PageDao pageDao = new PageDao();
 
     @Override
     public List<Note> getAll() {
@@ -136,6 +134,16 @@ public class NoteHandle implements Handle<Note> {
 
     public List<Note> orderByLikes (List<Note> notes){
         return noteDao.orderByLikes(notes);
+    }
+
+
+    public int wordCount(Note note){
+        List<Page> pages = pageDao.getNotePage(note);
+        int count = 0;
+        for (Page page : pages) {
+            count += page.getCount();
+        }
+        return count;
     }
 
 }

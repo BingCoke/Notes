@@ -48,7 +48,7 @@ public class LookNoteByLikesPane {
             if (i == -1){
                 return;
             }
-            Stage stage = NoteStage.showNote(reader,notes.get(i),0);
+            Stage stage = NoteStageForImg.showNote(reader,notes.get(i),"save");
             stage.show();
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override

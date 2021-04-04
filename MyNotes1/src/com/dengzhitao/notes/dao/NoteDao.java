@@ -95,11 +95,12 @@ public class NoteDao extends BaseDaoImpl<Note> {
                 Note note = new Note(
                         resultSet.getInt(1),
                         resultSet.getString(2),
-                        resultSet.getString(3),
+                        resultSet.getInt(3),
                         resultSet.getInt(4),
                         resultSet.getInt(5),
                         resultSet.getInt(6),
-                        resultSet.getTimestamp(7)
+                        resultSet.getInt(7),
+                        resultSet.getTimestamp(8)
                 );
                 notes.add(note);
             }
@@ -122,11 +123,12 @@ public class NoteDao extends BaseDaoImpl<Note> {
                 Note note = new Note(
                         resultSet.getInt(1),
                         resultSet.getString(2),
-                        resultSet.getString(3),
+                        resultSet.getInt(3),
                         resultSet.getInt(4),
                         resultSet.getInt(5),
                         resultSet.getInt(6),
-                        resultSet.getTimestamp(7)
+                        resultSet.getInt(7),
+                        resultSet.getTimestamp(8)
                 );
                 notes.add(note);
             }
@@ -158,11 +160,12 @@ public class NoteDao extends BaseDaoImpl<Note> {
                 Note note = new Note(
                         resultSet.getInt(1),
                         resultSet.getString(2),
-                        resultSet.getString(3),
+                        resultSet.getInt(3),
                         resultSet.getInt(4),
                         resultSet.getInt(5),
                         resultSet.getInt(6),
-                        resultSet.getTimestamp(7)
+                        resultSet.getInt(7),
+                        resultSet.getTimestamp(8)
                 );
                 notes.add(note);
             }
@@ -188,11 +191,12 @@ public class NoteDao extends BaseDaoImpl<Note> {
                 Note note = new Note(
                         resultSet.getInt(1),
                         resultSet.getString(2),
-                        resultSet.getString(3),
+                        resultSet.getInt(3),
                         resultSet.getInt(4),
                         resultSet.getInt(5),
                         resultSet.getInt(6),
-                        resultSet.getTimestamp(7)
+                        resultSet.getInt(7),
+                        resultSet.getTimestamp(8)
                 );
                 notes.add(note);
             }
@@ -216,11 +220,12 @@ public class NoteDao extends BaseDaoImpl<Note> {
                 Note note = new Note(
                         resultSet.getInt(1),
                         resultSet.getString(2),
-                        resultSet.getString(3),
+                        resultSet.getInt(3),
                         resultSet.getInt(4),
                         resultSet.getInt(5),
                         resultSet.getInt(6),
-                        resultSet.getTimestamp(7)
+                        resultSet.getInt(7),
+                        resultSet.getTimestamp(8)
                 );
                 notes.add(note);
             }
@@ -254,11 +259,12 @@ public class NoteDao extends BaseDaoImpl<Note> {
                 Note note = new Note(
                         resultSet.getInt(1),
                         resultSet.getString(2),
-                        resultSet.getString(3),
+                        resultSet.getInt(3),
                         resultSet.getInt(4),
                         resultSet.getInt(5),
                         resultSet.getInt(6),
-                        resultSet.getTimestamp(7)
+                        resultSet.getInt(7),
+                        resultSet.getTimestamp(8)
                 );
                 notes.add(note);
             }
@@ -292,11 +298,12 @@ public class NoteDao extends BaseDaoImpl<Note> {
                 Note note = new Note(
                         resultSet.getInt(1),
                         resultSet.getString(2),
-                        resultSet.getString(3),
+                        resultSet.getInt(3),
                         resultSet.getInt(4),
                         resultSet.getInt(5),
                         resultSet.getInt(6),
-                        resultSet.getTimestamp(7)
+                        resultSet.getInt(7),
+                        resultSet.getTimestamp(8)
                 );
                 notes.add(note);
             }

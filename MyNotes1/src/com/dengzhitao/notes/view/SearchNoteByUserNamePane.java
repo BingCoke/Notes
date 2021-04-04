@@ -78,7 +78,7 @@ public class SearchNoteByUserNamePane {
             if (i == -1){
                 return;
             }
-            NoteStage.showNote(reader,notes.get(i),0).show();
+            NoteStageForImg.showNote(reader,notes.get(i),"save").show();
         }
     }
 

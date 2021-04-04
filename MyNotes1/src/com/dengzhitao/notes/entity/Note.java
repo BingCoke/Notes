@@ -13,29 +13,22 @@ import java.util.Objects;
 public class Note {
     private Integer id;
     private String name;
-    private String content;
+    private Integer page;
+    private Integer imgCount;
     private Integer open;
     private Integer repositoryId;
     private Integer groupId;
     private Timestamp date;
 
     public Note() {
+
     }
 
-    public Note(Integer id, String name, String content, Integer open, Integer repositoryId, Integer groupId, Timestamp date) {
+    public Note(Integer id, String name, Integer page, Integer imgCount, Integer open, Integer repositoryId, Integer groupId) {
         this.id = id;
         this.name = name;
-        this.content = content;
-        this.open = open;
-        this.repositoryId = repositoryId;
-        this.groupId = groupId;
-        this.date = date;
-    }
-
-    public Note(int id,String name, String content, Integer open, Integer repositoryId, Integer groupId) {
-        this.id = id;
-        this.name = name;
-        this.content = content;
+        this.page = page;
+        this.imgCount = imgCount;
         this.open = open;
         this.repositoryId = repositoryId;
         this.groupId = groupId;
@@ -44,7 +37,31 @@ public class Note {
         this.date = new Timestamp(date.getTime());
     }
 
-    public Integer getId() {
+    public Note(Integer id, String name, Integer page, Integer imgCount, Integer open, Integer repositoryId, Integer groupId, Timestamp date) {
+        this.id = id;
+        this.name = name;
+        this.page = page;
+        this.imgCount = imgCount;
+        this.open = open;
+        this.repositoryId = repositoryId;
+        this.groupId = groupId;
+        this.date = date;
+    }
+
+    public Note(String name, Integer page, Integer imgCount, Integer open, Integer repositoryId, Integer groupId) {
+        this.id = 0;
+        this.name = name;
+        this.page = page;
+        this.imgCount = imgCount;
+        this.open = open;
+        this.repositoryId = repositoryId;
+        this.groupId = groupId;
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        this.date = new Timestamp(date.getTime());
+    }
+
+    public int getId() {
         return id;
     }
 
@@ -60,15 +77,23 @@ public class Note {
         this.name = name;
     }
 
-    public String getContent() {
-        return content;
+    public int getPage() {
+        return page;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setPage(Integer page) {
+        this.page = page;
     }
 
-    public Integer getOpen() {
+    public Integer getImgCount() {
+        return imgCount;
+    }
+
+    public void setImgCount(Integer imgCount) {
+        this.imgCount = imgCount;
+    }
+
+    public int getOpen() {
         return open;
     }
 
@@ -100,7 +125,6 @@ public class Note {
         this.date = date;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -108,7 +132,8 @@ public class Note {
         Note note = (Note) o;
         return Objects.equals(id, note.id) &&
                 Objects.equals(name, note.name) &&
-                Objects.equals(content, note.content) &&
+                Objects.equals(page, note.page) &&
+                Objects.equals(imgCount, note.imgCount) &&
                 Objects.equals(open, note.open) &&
                 Objects.equals(repositoryId, note.repositoryId) &&
                 Objects.equals(groupId, note.groupId) &&
@@ -117,6 +142,6 @@ public class Note {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, content, open, repositoryId, groupId, date);
+        return Objects.hash(id, name, page, imgCount, open, repositoryId, groupId, date);
     }
 }
