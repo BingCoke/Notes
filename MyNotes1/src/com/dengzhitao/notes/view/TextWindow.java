@@ -17,7 +17,7 @@ import javafx.stage.Stage;
  * 小窗口类 自定义小窗口文字
  * @author Z
  */
-public class TextWindow  extends Application{
+public class TextWindow{
 
 
     private static Stage stage ;
@@ -27,7 +27,7 @@ public class TextWindow  extends Application{
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                stage.close();
+                stage.hide();
             }
         });
         BorderPane borderPane = new BorderPane();
@@ -46,12 +46,7 @@ public class TextWindow  extends Application{
         return stage;
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        TextWindow.textWindow("ff").show();
-    }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+
+
 }

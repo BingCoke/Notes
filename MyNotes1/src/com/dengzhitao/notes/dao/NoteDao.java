@@ -35,7 +35,11 @@ public class NoteDao extends BaseDaoImpl<Note> {
     }
 
 
-    //得到某个笔记的点赞数
+    /**
+     * 得到某个笔记的点赞数
+     * @param note
+     * @return
+     */
     public Integer getLikeCount(Note note){
         Integer count = 0;
         Connection connection = JdbcUtil.connection;
@@ -57,7 +61,10 @@ public class NoteDao extends BaseDaoImpl<Note> {
     }
 
 
-    //得到new出新的note的id
+    /**
+     * 得到new出新的note的id
+     * @return
+     */
     public int getId(){
         int id = 0;
         Connection connection = JdbcUtil.connection;
@@ -77,7 +84,11 @@ public class NoteDao extends BaseDaoImpl<Note> {
     }
 
 
-    //根据日期排序所有的公开的笔记（搜索用户
+    /**
+     * 根据日期排序所有的公开的笔记（搜索用户
+     * @param reader
+     * @return
+     */
     public List<Note> selectOpenByDate(User reader){
         Connection connection = JdbcUtil.connection;
         ResultSet resultSet = null;
@@ -110,7 +121,10 @@ public class NoteDao extends BaseDaoImpl<Note> {
         return notes;
     }
 
-    //根据日期排序的所有的笔记（管理
+    /**
+     * 根据日期排序的所有的笔记（管理专用
+     * @return
+     */
     public List<Note> selectAllByDate(){
         Connection connection = JdbcUtil.connection;
         ResultSet resultSet = null;
@@ -139,7 +153,11 @@ public class NoteDao extends BaseDaoImpl<Note> {
     }
 
 
-    //根据点赞数排序公开笔记
+    /**
+     * 根据点赞数排序公开笔记
+     * @param reader
+     * @return
+     */
     public List<Note> selectByLikes(User reader){
         Connection connection = JdbcUtil.connection;
         ResultSet resultSet = null;
@@ -175,17 +193,60 @@ public class NoteDao extends BaseDaoImpl<Note> {
         return notes;
     }
 
-    //查找搜索用户能搜索到的所有的公开的笔记
-    public List<Note> selectAllOpen(User reader){
+
+
+    /**
+     * 普通用户搜索
+     * @param reader
+     * @param name
+     * @return
+     */
+    public List<Note> selectOpenByName(User reader,String name){
         Connection connection = JdbcUtil.connection;
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
         List<Note> notes = new ArrayList<>();
         try {
-            preparedStatement = connection.prepareStatement(
-                    "SELECT * FROM note where repository_id in (SELECT id from repository WHERE open=1) and open=1"+
-                    " union "+
-                    "SELECT * from note where repository_id in (SELECT id from repository WHERE repository.user_id = " + String.valueOf(reader.getId()) +")");
+            preparedStatement = connection.prepareStatement("SELECT * from " +
+                    "(SELECT * FROM note where repository_id in (SELECT id from repository WHERE open=1) and open=1 " +
+                    "union " +
+                    "SELECT * from note where repository_id in (SELECT id from repository WHERE repository.user_id = "+ reader.getId() +") " +
+                    ") " +
+                    "note where name = ? ");
+            preparedStatement.setString(1,name);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                Note note = new Note(
+                        resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getInt(3),
+                        resultSet.getInt(4),
+                        resultSet.getInt(5),
+                        resultSet.getInt(6),
+                        resultSet.getInt(7),
+                        resultSet.getTimestamp(8)
+                );
+                notes.add(note);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return notes;
+    }
+
+    /**
+     * 为管理员搜索笔记
+     * @param name
+     * @return
+     */
+    public List<Note> selectByName(String name){
+        Connection connection = JdbcUtil.connection;
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
+        List<Note> notes = new ArrayList<>();
+        try {
+            preparedStatement = connection.prepareStatement("select  * from note where name = ?");
+            preparedStatement.setString(1,name);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
                 Note note = new Note(
@@ -207,7 +268,12 @@ public class NoteDao extends BaseDaoImpl<Note> {
     }
 
 
-    //把某个用户的所有公开的note查找出来
+
+    /**
+     * 把某个用户的所有公开的note查找出来
+     * @param user
+     * @return
+     */
     public List<Note> selectOpenInUser(User user){
         Connection connection = JdbcUtil.connection;
         ResultSet resultSet = null;
@@ -236,7 +302,11 @@ public class NoteDao extends BaseDaoImpl<Note> {
     }
 
 
-    //传入list把笔记根据时间排序
+    /**
+     * 传入list把笔记根据时间排序
+     * @param noteList
+     * @return
+     */
     public List<Note> orderByDate(List<Note> noteList){
 
         Connection connection = JdbcUtil.connection;
@@ -275,7 +345,11 @@ public class NoteDao extends BaseDaoImpl<Note> {
     }
 
 
-    //传入list把笔记根据点赞排序
+    /**
+     * 传入list把笔记根据点赞排序
+     * @param noteList
+     * @return
+     */
     public List<Note> orderByLikes(List<Note> noteList){
 
         Connection connection = JdbcUtil.connection;
@@ -287,10 +361,8 @@ public class NoteDao extends BaseDaoImpl<Note> {
         for (Note note : noteList) {
             stringBuilder.append(note.getId()).append(",");
         }
-
         stringBuilder.replace(stringBuilder.length()-1,stringBuilder.length(),")");
         stringBuilder.append(") t  left JOIN likes on t.id=likes.note_id GROUP BY t.id order by count DESC");
-
         try {
             preparedStatement = connection.prepareStatement(stringBuilder.toString());
             resultSet = preparedStatement.executeQuery();

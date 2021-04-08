@@ -25,8 +25,9 @@ import javafx.stage.WindowEvent;
 import java.util.List;
 
 
-
-//修改知识库，组的名字
+/**
+ * 修改知识库，组的名字
+ */
 public class UpdateStage {
     private static Stage stage = new Stage();
     private static Repository repository;
@@ -73,6 +74,9 @@ public class UpdateStage {
         return stage;
     }
 
+    /**
+     * 两次密码判断事件
+     */
     private static class Judge implements EventHandler<KeyEvent> {
         @Override
         public void handle(KeyEvent event) {
@@ -106,7 +110,9 @@ public class UpdateStage {
     }
 
 
-
+    /**
+     * 点击修改密码确定事件
+     */
     private static class Sure implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -125,7 +131,7 @@ public class UpdateStage {
             name.setText("");
             Stage stage = TextWindow.textWindow("成功修改！");
             stage.show();
-            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            stage.setOnHidden(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent event) {
                     UpdateStage.stage.close();

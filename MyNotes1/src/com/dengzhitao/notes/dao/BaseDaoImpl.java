@@ -63,7 +63,6 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
         Class clazz = t.getClass();
         int id = 0;
         StringBuilder stringBuilder = new StringBuilder();
-
         //循环遍历找到对象的id值并保存
         Field[] declaredFields = clazz.getDeclaredFields();
         for (Field field : declaredFields) {
@@ -76,7 +75,6 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
                 }
             }
         }
-
         //如果找得到id对应的行就更改数据并返回true
         if (selectById(t.getClass(), id) != null) {
             try {
@@ -84,25 +82,22 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
                         .append(StringUtil.toUnderScoreCase(clazz.getName()
                                 .substring(clazz.getName().lastIndexOf("." ) + 1)))
                         .append(" set ");
+                //拼串建立SQL语句
                 for (Field field : declaredFields) {
                     field.setAccessible(true);
                     String valueName = StringUtil.toUnderScoreCase(field.getName());
                     Object value = field.get(t);
-                    if (field.get(t).getClass() == String.class   ){
-                        stringBuilder.append(valueName).append("=").append("'").append(value.toString()).append("'").append(",");
-                    }else if (field.get(t).getClass() == Integer.class){
-                        System.out.println(valueName);
-                        stringBuilder.append(valueName).append("=").append(value.toString()).append(",");
-                        System.out.println(stringBuilder);
-                    }
-                    System.out.println(stringBuilder);
+                    stringBuilder.append(valueName).append("=").append("?").append(",");
                 }
-                System.out.println(stringBuilder);
                 stringBuilder.delete(stringBuilder.length()-1,stringBuilder.length());
-                System.out.println(stringBuilder);
                 stringBuilder.append(" where id=").append(id);
-                System.out.println(stringBuilder);
                 preparedStatement = connection.prepareStatement(stringBuilder.toString());
+                //循环设置值
+                for (int i = 0; i < declaredFields.length; i++) {
+                    declaredFields[i].setAccessible(true);
+                    preparedStatement.setObject(i+1,declaredFields[i].get(t));
+                }
+
                 preparedStatement.executeUpdate();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
@@ -263,18 +258,12 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
         sql.append("select * from ").append(StringUtil.toUnderScoreCase(clazz.getName().substring(clazz.getName().lastIndexOf(".") + 1)))
                 .append(" where ")
                 .append(StringUtil.toUnderScoreCase(label))
-                .append("=");
-        if(value.getClass() == String.class){
-            sql.append("'").append(value).append("'");
-        } else if(value.getClass() == int.class || value.getClass() == Integer.class ){
-            sql.append(value);
-        } else {
-            sql.append(value);
-        }
+                .append("=").append("?");
+
         try {
             preparedStatement = connection.prepareStatement(sql.toString());
+            preparedStatement.setObject(1,value);
             resultSet = preparedStatement.executeQuery();
-
             while(resultSet.next()){
                 Field[] fields = clazz.getDeclaredFields();
                 Object obj = clazz.newInstance();
@@ -316,7 +305,6 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
                 .append(id);
 
         try {
-
             preparedStatement = connection.prepareStatement(stringBuilder.toString());
             resultSet = preparedStatement.executeQuery();
             if(!resultSet.next()){

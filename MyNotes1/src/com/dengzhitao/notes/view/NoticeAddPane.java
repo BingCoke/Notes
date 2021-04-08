@@ -43,7 +43,9 @@ public class NoticeAddPane {
 
     }
 
-
+    /**
+     * 增加按钮的点击事件
+     */
     public class AddClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {

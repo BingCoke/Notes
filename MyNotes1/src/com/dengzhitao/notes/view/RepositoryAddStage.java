@@ -16,6 +16,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.util.List;
 
@@ -29,9 +30,10 @@ public class RepositoryAddStage {
     private static RadioButton hide = new RadioButton("隐藏");
     private static User master;
     private static RepositoryHandle repositoryHandle = new RepositoryHandle();
+    private static Stage stage;
     public static Stage show(User user){
         master = user;
-        Stage stage = new Stage();
+        stage = new Stage();
         BorderPane root = new BorderPane();
         Text input = new Text("输入知识库名称");
         HBox hBox = new HBox();
@@ -60,6 +62,9 @@ public class RepositoryAddStage {
         return stage;
     }
 
+    /**
+     * 知识库名字的判断
+     */
     private static class Judge implements EventHandler<KeyEvent>{
         @Override
         public void handle(KeyEvent event) {
@@ -77,7 +82,9 @@ public class RepositoryAddStage {
         }
     }
 
-
+    /**
+     * 信息修改确定按钮的点击事件
+     */
     private static class Sure implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -92,8 +99,13 @@ public class RepositoryAddStage {
 
             repositoryHandle.add(new Repository(name.getText(),master.getId(),open));
             name.setText("");
-            TextWindow.textWindow("成功添加！");
-
+            Stage stage = TextWindow.textWindow("成功添加！");
+            stage.setOnHidden(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    RepositoryAddStage.stage.close();
+                }
+            });
         }
     }
 }

@@ -64,7 +64,9 @@ public class UpdatePasswordPane {
 
     //事件具体实现
 
-    //旧密码验证
+    /**
+     * 旧密码验证
+     */
     private class PastPasswordJudge implements EventHandler<Event>{
         @Override
         public void handle(Event event) {
@@ -77,7 +79,9 @@ public class UpdatePasswordPane {
         }
     }
 
-    //两次密码验证
+    /**
+     * 两次密码验证
+     */
     private class PasswordJudge implements EventHandler<Event> {
         @Override
         public void handle(Event event) {
@@ -89,7 +93,9 @@ public class UpdatePasswordPane {
         }
     }
 
-    //确认验证并将密码修改
+    /**
+     * 确认验证并将密码修改
+     */
     private class SuerClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {

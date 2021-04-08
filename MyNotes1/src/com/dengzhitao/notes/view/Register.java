@@ -3,6 +3,8 @@ package com.dengzhitao.notes.view;
 import com.dengzhitao.notes.entity.User;
 import com.dengzhitao.notes.service.Judge;
 import com.dengzhitao.notes.service.Userhandle;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -17,11 +19,22 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  * 注册界面
+ * @author Z
  */
 public class Register {
+    /**
+     * 个人信息的输入选择组件
+     * 用户名输入
+     * 密码和再次输入密码的输入框
+     * 性别选择
+     * 年龄选择
+     * 手机号输入
+     */
     private static TextField username1 = new TextField();
     private static PasswordField password1 = new PasswordField();
     private static PasswordField passwordAgain1 = new PasswordField();
@@ -29,11 +42,16 @@ public class Register {
     private static ChoiceBox gender1 = new ChoiceBox() ;
     private static ChoiceBox age1 = new ChoiceBox();
     private static TextField phoneNumber1 = new TextField();
+    /**
+     * 对于用户名，密码，手机号是否合法判断提醒的文本
+     */
     private static Text usernameJudge = new Text("");
     private static Text passwordJudge = new Text("");
     private static Text phoneNumberJudge = new Text("");
 
-    //初始化choicebox的值
+    private static Stage stage;
+
+    //初始化checkbox的值
     static {
         gender1.setItems(FXCollections.observableArrayList("男","女"));
         ObservableList<String> observableList = FXCollections.observableArrayList();
@@ -49,8 +67,9 @@ public class Register {
     }
 
     public static Stage getRegister(){
-        Stage stage = new Stage();
+        stage = new Stage();
         GridPane root = new GridPane();
+        //一些对应输入组件前面的文本
         Text username = new Text("输入用户名");
         Text password = new Text("输入密码");
         Text passwordAgain = new Text("再次输入密码");
@@ -58,6 +77,7 @@ public class Register {
         Text gender = new Text("选择性别");
         Text age = new Text("选择年龄");
         Text phoneNumber = new Text("输入手机号");
+
         Button ensure = new Button("确认");
 
         //加入控件
@@ -84,7 +104,7 @@ public class Register {
         root.add(phoneNumberJudge,2,6);
 
         //设置控件的事件，对文本输入是否合法判断
-        username1.setOnKeyReleased(new UsernameJudge());
+        username1.focusedProperty().addListener(new UsernameJudge());
         password1.setOnKeyReleased(new PasswordJudge());
         passwordAgain1.setOnKeyReleased(new PasswordJudge());
         phoneNumber1.setOnKeyReleased(new PhoneNumberJudge());
@@ -103,21 +123,30 @@ public class Register {
 
     //内部类设置事件之后的判断操作
 
-    //用户名合法判断
-    private static class UsernameJudge implements EventHandler<Event>{
+    /**
+     * 输入用户名的文本框失去焦点的时候判断用户名是否合法
+     */
+    private static class UsernameJudge implements InvalidationListener{
         @Override
-        public void handle(Event event) {
-            if(Judge.haveSameUsername(username1.getText())){
-                usernameJudge.setText("用户名重复！");
-            } else if (!Judge.notHaveChinese(username1.getText())){
-                usernameJudge.setText("用户名不能有中文！");
-            } else {
+        public void invalidated(Observable observable) {
+            if(!username1.isFocused() && !"".equals(username1)){
+                if (!Judge.notHaveChinese(username1.getText())){
+                    usernameJudge.setText("用户名不能有中文！");
+                }else if(Judge.haveSameUsername(username1.getText())){
+                    usernameJudge.setText("用户名重复！");
+                } else {
+                    usernameJudge.setText("");
+                }
+            } else if (username1.isFocused()){
                 usernameJudge.setText("");
             }
         }
     }
 
-    //密码是否相同判断
+
+    /**
+     * 密码是否相同判断
+     */
     private static class PasswordJudge implements EventHandler<Event>{
         @Override
         public void handle(Event event) {
@@ -129,7 +158,9 @@ public class Register {
         }
     }
 
-    //手机号是否合法判断
+    /**
+     * 手机号是否合法判断
+     */
     private static class PhoneNumberJudge implements EventHandler<Event> {
         @Override
         public void handle(Event event) {
@@ -140,21 +171,27 @@ public class Register {
             }
         }
     }
-    //注册确认
+
+    /**
+     * 注册确认
+     */
     private static class EnsureClick implements EventHandler{
 
         @Override
         public void handle(Event event) {
+            int i = 11;
             if(!Judge.onlyHaveNumber(phoneNumber1.getText()) ||
-                    phoneNumber1.getText().length() != 11 ||
+                    phoneNumber1.getText().length() != i ||
                     !(password1.getText().equals(passwordAgain1.getText())) ||
                     Judge.haveSameUsername(username1.getText()) ||
                     !Judge.notHaveChinese(username1.getText())){
                 TextWindow.textWindow("请输入正确的信息！");
                 return;
             }
+            //加密
+            String password = DigestUtils.md5Hex(password1.getText()).toString();
             User user = new User(username1.getText(),
-                    password1.getText(),
+                    password,
                     name1.getText(),
                     gender1.getSelectionModel().getSelectedItem().toString(),
                     Integer.parseInt(age1.getSelectionModel().getSelectedItem().toString()),
@@ -163,7 +200,21 @@ public class Register {
 
             Userhandle userhandle = new Userhandle();
             userhandle.register(user);
-            TextWindow.textWindow("注册成功！");
+            Stage sureStage = TextWindow.textWindow("注册成功！");
+            sureStage.setOnHidden(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    //把所有内容初始化
+                    username1.setText("");
+                    password1.setText("");
+                    passwordAgain1.setText("");
+                    name1.setText("");
+                    phoneNumber1.setText("");
+                    age1.getSelectionModel().select(0);
+                    gender1.getSelectionModel().select(0);
+                    stage.close();
+                }
+            });
         }
     }
 

@@ -29,21 +29,16 @@ public class SearchNoteByNamePane {
     private Button date = new Button("时间排序");
     private Button like = new Button("点赞排序");
 
-    //放入该用户能查的笔记
-    private List<Note> notes = new ArrayList<>();
-    //放入用户检索的笔记
-    private List<Note> noteList = new ArrayList<>();
     private NoteHandle noteHandle = new NoteHandle();
     private User reader;
+    /**
+     *     放入用户检索的笔记
+     */
+    private List<Note> noteList = new ArrayList<>();
 
     public Pane getPane(User reader) {
         this.reader = reader;
 
-        if (reader.getPower() == 3) {
-            notes = noteHandle.getAll();
-        } else {
-            notes = noteHandle.getOpenNotes(reader);
-        }
 
 
         HBox box1 = new HBox(search, start);
@@ -64,29 +59,25 @@ public class SearchNoteByNamePane {
         return root;
     }
 
-    //搜索按钮点击后显示搜索结果
+    /**
+     * 搜索按钮点击后显示搜索结果
+     */
     private class SearchStart implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
             noteList.clear();
             ObservableList<String> observableList = FXCollections.observableArrayList();
-            if(notes == null){
-                return;
-            }
-
-            for (Note note : notes) {
-                System.out.println(search.getText());
-                System.out.println(note.getName());
-                if(note.getName().equals(search.getText())){
-                    noteList.add(note);
-                    observableList.add(note.getName());
-                }
+            noteList = noteHandle.getOpenNotesByName(reader,search.getText());
+            for (Note note : noteList) {
+                observableList.addAll(note.getName());
             }
             listView.setItems(observableList);
         }
     }
 
-    //listview的点击事件打开笔记
+    /**
+     * listview的点击事件打开笔记
+     */
     private class ViewClick implements EventHandler<MouseEvent>{
         @Override
         public void handle(MouseEvent event) {
@@ -94,16 +85,24 @@ public class SearchNoteByNamePane {
             if (i == -1){
                 return;
             }
-            NoteStageForImg.showNote(reader,noteList.get(i),"save").show();
+            //先确认笔记有没有被删除
+            Note note =noteHandle.getById(noteList.get(i).getId());
+            if(note == null){
+                TextWindow.textWindow("笔记被删除！");
+                return;
+            }
+            NoteStageForImg.showNote(reader,note,"save").show();
         }
     }
 
 
-    //点击事件后按照时间顺序排序
+    /**
+     * 点击事件后把笔记按照时间顺序排序
+     */
     private class DateClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
-            if (noteList.size() == 0 || noteList == null ){
+            if (noteList.size() == 0){
                 return;
             }
             noteList = noteHandle.orderByDate(noteList);
@@ -115,11 +114,13 @@ public class SearchNoteByNamePane {
         }
     }
 
-    //按照点赞顺序排序
+    /**
+     * 把搜素到的笔记按照点赞顺序排序
+     */
     private  class LikeClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
-            if (noteList.size() == 0 || noteList == null ){
+            if (noteList.size() == 0){
                 return;
             }
             noteList = noteHandle.orderByLikes(noteList);

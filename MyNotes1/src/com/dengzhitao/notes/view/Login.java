@@ -11,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -44,7 +43,6 @@ public class Login extends Application {
         Text username = new Text("用户名");
         Text password = new Text("密码");
 
-
         gridPane.add(username,0,0);
         gridPane.add(password,0,1);
         gridPane.add(usernameType,1,0);
@@ -56,18 +54,15 @@ public class Login extends Application {
 
 
         //设置事件
-
         register.setOnAction(new RegisterCilck());
         clear.setOnAction(new ClearCilck());
         login.setOnAction(new LoginCilck());
-
 
 
         hBox.getChildren().addAll(login,register,clear);
         hBox.setAlignment(Pos.BASELINE_CENTER);
 
         root.setBottom(hBox);
-
         primaryStage.setResizable(false);
         primaryStage.setTitle("MyNotes");
         primaryStage.setScene(new Scene(root,250,120));
@@ -80,7 +75,9 @@ public class Login extends Application {
 
     //事件实现
 
-    //登录
+    /**
+     * 登录事件
+     */
     private class LoginCilck implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -99,7 +96,9 @@ public class Login extends Application {
         }
     }
 
-    //注册界面打开
+    /**
+     * 注册界面打开
+     */
     private class RegisterCilck implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -107,7 +106,9 @@ public class Login extends Application {
         }
     }
 
-    //清除输入框
+    /**
+     * 清除输入框
+     */
     private class ClearCilck implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -117,7 +118,9 @@ public class Login extends Application {
     }
 
 
-    //程序退出后把connect关闭
+    /**
+     * 程序退出后把connect关闭
+     */
     private class StageClose implements EventHandler<WindowEvent> {
         @Override
         public void handle(WindowEvent event) {

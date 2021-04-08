@@ -1,7 +1,6 @@
 package com.dengzhitao.notes.view;
 
 import com.dengzhitao.notes.entity.User;
-import com.dengzhitao.notes.entity.UserComment;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -59,6 +58,9 @@ public class UserMenu {
         return stage;
     }
 
+    /**
+     * 公告按钮点击事件
+     */
     private static class NoticeClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -66,6 +68,9 @@ public class UserMenu {
         }
     }
 
+    /**
+     * 我的知识库点击事件
+     */
     private static class MyRepositoryCilck implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -73,6 +78,9 @@ public class UserMenu {
         }
     }
 
+    /**
+     * 个人信息点击事件
+     */
     private static class PersonalInformationClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -80,6 +88,9 @@ public class UserMenu {
         }
     }
 
+    /**
+     * 查询界面点击事件
+     */
     private static class  SearchNoteClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -87,6 +98,9 @@ public class UserMenu {
         }
     }
 
+    /**
+     * 修改密码界面点击事件
+     */
     private static class UpdatePasswordClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -94,6 +108,9 @@ public class UserMenu {
         }
     }
 
+    /**
+     * 用户评论界面点击事件
+     */
     private static class UserCommentClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {

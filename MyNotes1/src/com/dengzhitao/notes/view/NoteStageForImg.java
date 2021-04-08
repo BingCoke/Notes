@@ -17,6 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -28,11 +29,12 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Z
+ */
 public class NoteStageForImg {
 
     private static Stage stage;
-
-
 
     private static WebView webView = new WebView();
     private static WebEngine webEngine = webView.getEngine();
@@ -58,8 +60,10 @@ public class NoteStageForImg {
     private static String imgPath = "file:///" +NoteStage.class.getResource("").toString().substring(6,NoteStageForImg.class.getResource("").toString().lastIndexOf("/out")) + "/src/com/dengzhitao/notes/html/img/";
 
     private static List<Page> pages;
+
     //将要删除的page存起来集中删除
     private static List<Page> pagesToRemove;
+
     private static NoteHandle noteHandle = new NoteHandle();
     private static Userhandle userhandle = new Userhandle();
     private static PageHandle pageHandle = new PageHandle();
@@ -75,6 +79,8 @@ public class NoteStageForImg {
     private static int pageCount;
     //记录是否是第一次打开分页器
     private static int icount;
+
+    private static Text wordCount = new Text();
     /**
      * 笔记查看界面
      * @param reader
@@ -87,6 +93,7 @@ public class NoteStageForImg {
         NoteStageForImg.reader = reader;
         NoteStageForImg.writer = noteHandle.getMaster(note);
         NoteStageForImg.type = type;
+        initpage = note.getPage();
         pageCount = 0;
         icount = 0;
         title.setText(note.getName());
@@ -96,11 +103,15 @@ public class NoteStageForImg {
         stage.setTitle(writer.getName() +"的笔记" + " 赞：" + noteHandle.likeCount(note));
         pageCount = note.getPage();
         pagesToRemove = new ArrayList<>();
+        wordCount.setText("字数：" + noteHandle.wordCount(note));
+
 
         BorderPane root = new BorderPane();
         HBox hBoxTop = new HBox();
         HBox hBoxBottom = new HBox();
         hBoxBottom.setAlignment(Pos.BASELINE_CENTER);
+
+
         pagination = new Pagination(note.getPage(),(pageCount = 0));
         //得到笔记的每页的内容
         pages = pageHandle.getNotePage(note);
@@ -122,6 +133,7 @@ public class NoteStageForImg {
         root.setCenter(littleText);
         //量身定制
         if(writer.getId() == reader.getId()){
+            hBoxTop.getChildren().addAll(wordCount);
             hBoxBottom.getChildren().addAll(pageAdd,pageRemove,img,open,save,remove);
             title.setEditable(true);
             htmlPath = "../html/forWriter.html";
@@ -133,6 +145,7 @@ public class NoteStageForImg {
         }
         if(reader.getPower() == 3) {
             hBoxBottom.getChildren().addAll(remove,lookWriter);
+            hBoxTop.getChildren().addAll(wordCount);
         }
 
 
@@ -158,7 +171,6 @@ public class NoteStageForImg {
                     pages.remove(note.getPage());
                 }
 
-
                 //页数计数
                 pageCount = param;
                 //将页面更换到对应的页数
@@ -166,6 +178,7 @@ public class NoteStageForImg {
                 return webView;
             }
         });
+
         littleText.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -184,15 +197,18 @@ public class NoteStageForImg {
         lookWriter.setOnAction(new LookWriter());
         save.setOnAction(new SaveClick());
 
-        System.out.println(htmlPath);
+        HBox.setHgrow(title, Priority.ALWAYS);
         webEngine.load(NoteStageForImg.class.getResource(htmlPath).toExternalForm());
         stage.setScene(new Scene(root,600,500));
         return stage;
     }
 
 
-
-    //选择照片后先把照片存到工程文件里，方便日后调用
+    /**
+     * 选择照片后先把照片存到工程文件里，方便日后调用
+     * @param file
+     * @param path
+     */
     private static void copyImg(File file, String path){
         FileOutputStream fo = null;
         FileInputStream fi =null;
@@ -223,8 +239,9 @@ public class NoteStageForImg {
     }
 
 
-
-    //页面增加事件
+    /**
+     * 页面增加事件
+     */
     private static class AddPage implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -235,7 +252,9 @@ public class NoteStageForImg {
         }
     }
 
-    //页面移除事件
+    /**
+     * 页面移除事件
+     */
     private static class RemovePage implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -246,6 +265,9 @@ public class NoteStageForImg {
         }
     }
 
+    /**
+     * 照片插入事件
+     */
     private static class ImgClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -266,17 +288,22 @@ public class NoteStageForImg {
     }
 
 
-    //管理员可通过笔记界面直接查看用户的个人信息界面
+    /**
+     * 管理员可通过笔记界面直接查看用户的个人信息界面
+     */
     private static class LookWriter implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
             Stage stage = new Stage();
             stage.setResizable(false);
             stage.setScene(new Scene(new InformationPane().getPane(reader,writer),400,500));
+            stage.show();
         }
     }
 
-    //点赞后事件
+    /**
+     * 点赞后事件
+     */
     private static class LikeClick implements EventHandler<MouseEvent>{
         @Override
         public void handle(MouseEvent event) {
@@ -295,11 +322,13 @@ public class NoteStageForImg {
         }
     }
 
-    //笔记保存
+    /**
+     * 笔记保存
+     */
     private static class SaveClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
-            if(title.getText().equals("")){
+            if("".equals(title.getText())){
                 TextWindow.textWindow("标题不能为空！");
                 return;
             }
@@ -317,31 +346,33 @@ public class NoteStageForImg {
             pages.get(pageCount).setCount(webEngine.executeScript(js + ".innerText").toString().length());
 
             note.setName(title.getText());
+            noteHandle.add(note);
+            pageHandle.saveAll(pages,initpage,type);
             if(type.equals("add")){
-                noteHandle.add(note);
-                pageHandle.saveAll(pages,initpage,type);
                 type = "save";
-                initpage = note.getPage();
-            } else {
-                noteHandle.save(note);
-                pageHandle.saveAll(pages,initpage,type);
-                initpage = note.getPage();
             }
-
+            //字数改一下
+            wordCount.setText("字数：" + noteHandle.wordCount(note));
+            initpage = note.getPage();
 
         }
     }
 
-
+    /**
+     * 笔记删除事件
+     */
     private static class RemoveClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
             noteHandle.remove(note);
             pageHandle.removeAll(pages);
+            stage.hide();
         }
     }
 
-
+    /**
+     * 笔记是否公开事件
+     */
     private static class OpenClick implements EventHandler<MouseEvent>{
         @Override
         public void handle(MouseEvent event) {

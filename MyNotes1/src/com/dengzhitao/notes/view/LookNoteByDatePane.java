@@ -10,6 +10,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.util.List;
 /**
@@ -45,6 +47,10 @@ public class LookNoteByDatePane {
         return root;
     }
 
+
+    /**
+     * list view点击事件
+     */
     private class ViewClick implements EventHandler<MouseEvent> {
         @Override
         public void handle(MouseEvent event) {
@@ -52,7 +58,27 @@ public class LookNoteByDatePane {
             if (i == -1){
                 return;
             }
-            NoteStageForImg.showNote(reader,notes.get(i),"add").show();
+            Stage stage = NoteStageForImg.showNote(reader,notes.get(i),"save");
+            stage.show();
+            stage.setOnHidden(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    noteFlush();
+                }
+            });
         }
+    }
+
+
+    /**
+     * 笔记刷新
+     */
+    public void noteFlush(){
+        notes = noteHandle.getAllNotesByDate();
+        ObservableList<String> observableList = FXCollections.observableArrayList();
+        for (Note note : notes) {
+            observableList.add(note.getName() + " 点赞数:" + String.valueOf(noteHandle.likeCount(note)));
+        }
+        listView.setItems(observableList);
     }
 }

@@ -45,6 +45,9 @@ public class SearchPane {
         return root;
     }
 
+    /**
+     * 展示 搜素用户名的搜素笔记 界面
+     */
     private class SearchByNameClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -52,6 +55,9 @@ public class SearchPane {
         }
     }
 
+    /**
+     * 展示 搜素笔记名的搜素笔记 界面
+     */
     private class SearchByUserClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -59,6 +65,9 @@ public class SearchPane {
         }
     }
 
+    /**
+     * 按照时间排序所有笔记界面
+     */
     private class LookByDateClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -66,6 +75,9 @@ public class SearchPane {
         }
     }
 
+    /**
+     * 按照点赞排序笔记界面
+     */
     private class LookByLikesClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {

@@ -179,6 +179,10 @@ public class InformationPane {
 
 
     //用户信息界面的事件实现
+
+    /**
+     * 电话号码判断事件
+     */
     private class PhoneNumberJudge implements EventHandler<Event> {
         @Override
         public void handle(Event event) {
@@ -190,7 +194,9 @@ public class InformationPane {
         }
     }
 
-
+    /**
+     * 个人信息 保存事件
+     */
     private class Save implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -203,11 +209,13 @@ public class InformationPane {
             master.setAge(age2.getSelectionModel().getSelectedIndex() + 1);
             master.setPhoneNumber(phoneNumber1.getText());
             userhandle.update(master);
-                TextWindow.textWindow("信息修改成功！");
+            TextWindow.textWindow("信息修改成功！");
         }
     }
 
-
+    /**
+     * 设置用户黑名单事件
+     */
     private  class Ban implements EventHandler<MouseEvent>{
         @Override
         public void handle(MouseEvent event) {

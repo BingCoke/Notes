@@ -56,7 +56,10 @@ public class SearchNoteByUserNamePane {
         HBox.setHgrow(search, Priority.ALWAYS);
         return root;
     }
-    //搜索按钮点击后显示搜索结果
+
+    /**
+     * 搜索按钮点击后显示搜索结果
+     */
     private class SearchStart implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event) {
@@ -70,7 +73,9 @@ public class SearchNoteByUserNamePane {
         }
     }
 
-    //listview的点击事件打开笔记
+    /**
+     * listview的点击事件打开笔记
+     */
     private class ViewClick implements EventHandler<MouseEvent>{
         @Override
         public void handle(MouseEvent event) {
@@ -78,11 +83,19 @@ public class SearchNoteByUserNamePane {
             if (i == -1){
                 return;
             }
-            NoteStageForImg.showNote(reader,notes.get(i),"save").show();
+            //有可能笔记被删除 先看看有没有被删除
+            Note note =noteHandle.getById(notes.get(i).getId());
+            if(note == null){
+                TextWindow.textWindow("笔记被删除！");
+                return;
+            }
+            NoteStageForImg.showNote(reader,note,"save").show();
         }
     }
 
-    //点击事件后按照时间顺序排序
+    /**
+     * 点击事件后按照时间顺序排序
+     */
     private class DateClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -98,7 +111,9 @@ public class SearchNoteByUserNamePane {
         }
     }
 
-    //点击事件后按照点赞数量顺序排序
+    /**
+     * 点击事件后按照点赞数量顺序排序
+     */
     private  class LikeClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {

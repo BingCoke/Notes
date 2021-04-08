@@ -61,6 +61,10 @@ public class NoticePane {
         return root;
     }
 
+
+    /**
+     * 列表点击事件，查看对应的公告
+     */
     private class ListClick implements EventHandler<MouseEvent>{
         @Override
         public void handle(MouseEvent event) {
@@ -74,6 +78,10 @@ public class NoticePane {
         }
     }
 
+
+    /**
+     * 修改公告的事件
+     */
     private class UpdateClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -81,6 +89,10 @@ public class NoticePane {
         }
     }
 
+
+    /**
+     * 公告信息的保存事件
+     */
     private class SaveClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -97,6 +109,10 @@ public class NoticePane {
         }
     }
 
+
+    /**
+     * 公告删除事件
+     */
     private class RemoveClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -110,7 +126,9 @@ public class NoticePane {
         }
     }
 
-
+    /**
+     * 把公告列表的删除事件
+     */
     public void listViewFlush(){
         //刷新读取公告，并加入到listview中
         ObservableList<String> items = FXCollections.observableArrayList();

@@ -62,10 +62,9 @@ public class CommentPane {
     }
 
 
-
-
-
-    //事件的实现
+    /**
+     * 事件的实现
+     */
     private class ListViewClick implements EventHandler<MouseEvent>{
         @Override
         public void handle(MouseEvent event) {
@@ -84,7 +83,9 @@ public class CommentPane {
         }
     }
 
-
+    /**
+     * 评论发送按钮点击事件
+     */
     private class SentClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -94,7 +95,9 @@ public class CommentPane {
         }
     }
 
-    //评论刷新
+    /**
+     * 评论刷新
+     */
     private void commentFlush(){
         userComments = userCommentHandle.getAll();
         ObservableList<String> observableList = FXCollections.observableArrayList();

@@ -64,7 +64,9 @@ public class SearchAllUserPane {
     }
 
 
-    //点击搜索按钮后显示用户的事件
+    /**
+     * 点击搜索按钮后显示用户的事件
+     */
     private static class Search implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -85,7 +87,9 @@ public class SearchAllUserPane {
     }
 
 
-    //如果搜索框是空白的时候就显示所有
+    /**
+     * 如果搜索框是空白的时候就显示所有
+     */
     private static class ShowAll implements EventHandler<KeyEvent>{
         @Override
         public void handle(KeyEvent event) {
@@ -101,7 +105,9 @@ public class SearchAllUserPane {
         }
     }
 
-    //点击view后显示用户的信息
+    /**
+     * 点击view后显示用户的信息
+     */
     private static class ViewClick implements EventHandler<MouseEvent>{
         @Override
         public void handle(MouseEvent event) {

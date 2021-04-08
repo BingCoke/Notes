@@ -10,10 +10,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -40,6 +40,10 @@ public class MyRepositoryPane {
     private GroupHandle groupHandle = new GroupHandle();
     private NoteHandle noteHandle = new NoteHandle();
 
+    private Text repositoryCount = new Text("知识库");
+    private Text groupCount = new Text("组");
+    private Text noteCount = new Text("笔记");
+
     public MyRepositoryPane(User reader, User master) {
         this.reader = reader;
         this.master = master;
@@ -47,20 +51,19 @@ public class MyRepositoryPane {
 
     public Pane getPane(){
         BorderPane root = new BorderPane();
+        //知识库，组，笔记增加按钮
         Button repositoryAdd = new Button("增加");
         Button groupAdd = new Button("增加");
         Button noteAdd = new Button("增加");
-
+        //知识库，组，笔记 删除按钮
         Button repositoryRemove = new Button("删除");
         Button groupRemove = new Button("删除");
-
+        //知识库，组 名字修改
         Button repositoryUpdate = new Button("修改");
         Button groupUpdate = new Button("修改");
 
         HBox repositoryHBox = new HBox();
         HBox groupHBox = new HBox();
-
-
 
         VBox repositoryBox = new VBox();
         VBox groupBox = new VBox();
@@ -73,9 +76,9 @@ public class MyRepositoryPane {
         repositoryFlush();
 
         //控件添加
-        repositoryBox.getChildren().add(repositoryView);
-        groupBox.getChildren().add(groupView);
-        noteBox.getChildren().add(noteView);
+        repositoryBox.getChildren().addAll(repositoryCount,repositoryView);
+        groupBox.getChildren().addAll(groupCount,groupView);
+        noteBox.getChildren().addAll(noteCount,noteView);
         VBox.setVgrow(repositoryView, Priority.ALWAYS);
         VBox.setVgrow(groupView, Priority.ALWAYS);
         VBox.setVgrow(noteView, Priority.ALWAYS);
@@ -120,7 +123,10 @@ public class MyRepositoryPane {
 
     //事件实现
 
-    //listview鼠标点击后相关界面的刷新
+    /**
+     * listview鼠标点击后相关界面的刷新
+     */
+
     private class RepositoryClick implements EventHandler<MouseEvent>{
         @Override
         public void handle(MouseEvent event) {
@@ -134,6 +140,7 @@ public class MyRepositoryPane {
             } else {
                 open.setSelected(false);
             }
+            noteCount.setText("笔记");
             noteView.setItems(null);
             groupFlush();
         }
@@ -154,7 +161,7 @@ public class MyRepositoryPane {
             if(i == -1){return;}
             Stage stage = NoteStageForImg.showNote(reader,notes.get(i),"save");
             stage.show();
-            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            stage.setOnHidden(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent event) {
                     noteFlush();
@@ -165,15 +172,14 @@ public class MyRepositoryPane {
 
 
 
-
-    //增加按钮的事件实现
-
-    //增加事件
+    /**
+     * 增加事件
+     */
     private class RepositoryAdd implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
             Stage stage = RepositoryAddStage.show(master);
-            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            stage.setOnHidden(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent event) {
                     repositoryFlush();
@@ -183,14 +189,13 @@ public class MyRepositoryPane {
         }
     }
 
-
     private class GroupAdd implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
             int i = repositoryView.getSelectionModel().getSelectedIndex();
             if(i == -1){ return; }
             Stage stage = GroupAddStage.show(repositories.get(i));
-            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            stage.setOnHidden(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent event) {
                     groupFlush();
@@ -211,7 +216,7 @@ public class MyRepositoryPane {
 
             Stage stage = NoteStageForImg.showNote(master,new Note(noteHandle.getId(),"",1,0,1,repositories.get(j).getId(),noteGroups.get(i).getId()),"add");
             stage.show();
-            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            stage.setOnHidden(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent event) {
                     noteFlush();
@@ -221,8 +226,10 @@ public class MyRepositoryPane {
     }
 
 
-    //删除事件
-    //删除后将对应的子数据都删除掉，并且刷新一下页面
+    /**
+     * 删除事件
+     * 删除后将对应的子数据都删除掉，并且刷新一下页面
+     */
     private class RepositoryRemove implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -252,7 +259,9 @@ public class MyRepositoryPane {
     }
 
 
-    //修改事件
+    /**
+     * 修改事件
+     */
     private class RepositoryUpdate implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -268,7 +277,6 @@ public class MyRepositoryPane {
             });
         }
     }
-
 
     private class GroupUPdate implements EventHandler<ActionEvent>{
         @Override
@@ -288,7 +296,9 @@ public class MyRepositoryPane {
         }
     }
 
-    //知识库是否隐藏设置
+    /**
+     * 知识库是否隐藏设置事件
+     */
     private class OpenClick implements EventHandler<MouseEvent>{
         @Override
         public void handle(MouseEvent event) {
@@ -305,7 +315,9 @@ public class MyRepositoryPane {
     }
 
 
-    //listview的刷新
+    /**
+     * listview的刷新
+     */
     public void repositoryFlush(){
         ObservableList<String> repositoryList = FXCollections.observableArrayList();
         repositories = repositoryHandle.getByMaster(master);
@@ -315,6 +327,7 @@ public class MyRepositoryPane {
         for (Repository repository : repositories) {
             repositoryList.add(repository.getName());
         }
+        repositoryCount.setText("知识库：" + repositories.size());
         repositoryView.setItems(repositoryList);
     }
 
@@ -332,6 +345,7 @@ public class MyRepositoryPane {
         for (NoteGroup noteGroup : noteGroups) {
             groupList.add(noteGroup.getName());
         }
+        groupCount.setText("组：" + noteGroups.size());
         groupView.setItems(groupList);
     }
 
@@ -349,6 +363,7 @@ public class MyRepositoryPane {
         for (Note note : notes) {
             noteList.add(note.getName());
         }
+        noteCount.setText("笔记:" + notes.size());
         noteView.setItems(noteList);
     }
 

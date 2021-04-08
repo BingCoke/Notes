@@ -24,6 +24,10 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
+/**
+ * 评论回复界面
+ * @author Z
+ */
 public class ReplyStage {
     private static Stage stage = new Stage();
     private static Userhandle userhandle = new Userhandle();
@@ -78,7 +82,9 @@ public class ReplyStage {
         return stage;
     }
 
-
+    /**
+     * 回复发送按钮的事件
+     */
     private static class SentClick implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event) {
@@ -88,6 +94,9 @@ public class ReplyStage {
         }
     }
 
+    /**
+     * 评论列表的刷新事件
+     */
     private static class ListViewClick implements EventHandler<MouseEvent>{
         @Override
         public void handle(MouseEvent event) {
@@ -108,7 +117,9 @@ public class ReplyStage {
         }
     }
 
-
+    /**
+     * 用户评论的删除事件
+     */
     private static class UserCommentRemoveClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -118,6 +129,9 @@ public class ReplyStage {
         }
     }
 
+    /**
+     * 评论回复的删除事件
+     */
     private static class ReplyRemoveClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -131,7 +145,9 @@ public class ReplyStage {
     }
 
 
-    //回复刷新
+    /**
+     * 回复刷新
+     */
     private static void replyFlush(){
         replies = replyHandle.getByUserComment(userComment);
         ObservableList<String> observableList = FXCollections.observableArrayList();

@@ -4,6 +4,8 @@ import com.dengzhitao.notes.entity.User;
 import com.dengzhitao.notes.service.Judge;
 import com.dengzhitao.notes.service.Userhandle;
 import javafx.application.Application;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -17,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.apache.commons.codec.digest.DigestUtils;
 
 public class AdminRegisterStage extends Application {
     private static TextField username1 = new TextField();
@@ -53,7 +56,7 @@ public class AdminRegisterStage extends Application {
         root.add(passwordJudge,2,2);
 
         //设置控件的事件，对文本输入是否合法判断
-        username1.setOnKeyReleased(new UsernameJudge());
+        username1.focusedProperty().addListener(new UsernameJudge());
         password1.setOnKeyReleased(new PasswordJudge());
         passwordAgain1.setOnKeyReleased(new PasswordJudge());
 
@@ -77,22 +80,29 @@ public class AdminRegisterStage extends Application {
 
 
     //内部类设置事件之后的判断操作
-
-    //用户名合法判断
-    private static class UsernameJudge implements EventHandler<Event> {
+    /**
+     * 输入用户名的文本框失去焦点的时候判断用户名是否合法
+     */
+    private static class UsernameJudge implements InvalidationListener {
         @Override
-        public void handle(Event event) {
-            if(Judge.haveSameUsername(username1.getText())){
-                usernameJudge.setText("用户名重复！");
-            } else if (!Judge.notHaveChinese(username1.getText())){
-                usernameJudge.setText("用户名不能有中文！");
-            } else {
+        public void invalidated(Observable observable) {
+            if(!username1.isFocused() && !"".equals(username1)){
+                if (!Judge.notHaveChinese(username1.getText())){
+                    usernameJudge.setText("用户名不能有中文！");
+                }else if(Judge.haveSameUsername(username1.getText())){
+                    usernameJudge.setText("用户名重复！");
+                } else {
+                    usernameJudge.setText("");
+                }
+            } else if (username1.isFocused()){
                 usernameJudge.setText("");
             }
         }
     }
 
-    //密码是否相同判断
+    /**
+     * 密码是否相同判断
+     */
     private static class PasswordJudge implements EventHandler<Event>{
         @Override
         public void handle(Event event) {
@@ -105,8 +115,9 @@ public class AdminRegisterStage extends Application {
     }
 
 
-
-    //注册确认
+    /**
+     * 注册确认
+     */
     private static class EnsureClick implements EventHandler{
 
         @Override
@@ -118,7 +129,7 @@ public class AdminRegisterStage extends Application {
                 return;
             }
             User user = new User(username1.getText(),
-                    password1.getText(),
+                    DigestUtils.md5Hex(password1.getText()).toString(),
                     "1",
                     "1",
                     1,

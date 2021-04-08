@@ -1,6 +1,5 @@
 package com.dengzhitao.notes.view;
 
-import com.dengzhitao.notes.dao.NoteDao;
 import com.dengzhitao.notes.entity.Note;
 import com.dengzhitao.notes.entity.User;
 import com.dengzhitao.notes.service.NoteHandle;
@@ -15,7 +14,6 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class LookNoteByLikesPane {
@@ -40,7 +38,9 @@ public class LookNoteByLikesPane {
     }
 
 
-    //list view点击事件打开笔记
+    /**
+     * list view点击事件打开笔记
+     */
     private class ViewClick implements EventHandler<MouseEvent>{
         @Override
         public void handle(MouseEvent event) {
@@ -50,7 +50,7 @@ public class LookNoteByLikesPane {
             }
             Stage stage = NoteStageForImg.showNote(reader,notes.get(i),"save");
             stage.show();
-            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            stage.setOnHidden(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent event) {
                     noteFlush();
@@ -59,7 +59,9 @@ public class LookNoteByLikesPane {
         }
     }
 
-    //笔记刷新
+    /**
+     * 笔记刷新
+     */
     public void noteFlush(){
         notes = noteHandle.getNotesByLikes(reader);
         ObservableList<String> observableList = FXCollections.observableArrayList();

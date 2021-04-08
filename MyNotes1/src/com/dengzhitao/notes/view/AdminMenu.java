@@ -61,7 +61,9 @@ public class AdminMenu {
     }
 
 
-
+    /**
+     * 公告按钮点击事件
+     */
     private static class Notice implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -69,6 +71,9 @@ public class AdminMenu {
         }
     }
 
+    /**
+     * 公告增加点击事件
+     */
     private static class NoticeAdd implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -76,7 +81,9 @@ public class AdminMenu {
         }
     }
 
-
+    /**
+     * 查询用户点击事件
+     */
     private static class SearchUserClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -84,6 +91,9 @@ public class AdminMenu {
         }
     }
 
+    /**
+     * 查询笔记界面事件
+     */
     private static class  SearchNoteClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -91,6 +101,9 @@ public class AdminMenu {
         }
     }
 
+    /**
+     * 密码修改界面点击事件
+     */
     private static class UpdatePassword implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event) {
@@ -98,6 +111,9 @@ public class AdminMenu {
         }
     }
 
+    /**
+     * 用户评论界面点击事件
+     */
     private static class UserCommentClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {

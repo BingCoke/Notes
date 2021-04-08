@@ -7,15 +7,18 @@ import java.util.List;
 
 public class Judge {
 
+
+
+
+    //根据用户名寻找用户
     public static boolean haveSameUsername(String username){
+
         UserDao userDao = new UserDao();
-        List<User> list = userDao.selectAll();
-        for (User user : list) {
-            if (user.getUsername().equals(username)) {
-                return true;
-            }
+        List<User> users = userDao.selectExact("username",username);
+        if(users.size() == 0){
+            return false;
         }
-        return false;
+        return true;
     }
 
     public static boolean notHaveChinese(String s){

@@ -14,6 +14,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.util.List;
 
@@ -26,9 +27,10 @@ public class GroupAddStage {
     private static Text judge = new Text("");
     private static Repository master;
     private static GroupHandle groupHandle = new GroupHandle();
+    private static Stage stage;
     public static Stage show(Repository repository){
         master = repository;
-        Stage stage = new Stage();
+        stage = new Stage();
         BorderPane root = new BorderPane();
         Text input = new Text("输入组名称");
         HBox hBox = new HBox();
@@ -57,6 +59,9 @@ public class GroupAddStage {
         return stage;
     }
 
+    /**
+     * 判断事件
+     */
     private static class Judge implements EventHandler<KeyEvent> {
         @Override
         public void handle(KeyEvent event) {
@@ -74,7 +79,9 @@ public class GroupAddStage {
         }
     }
 
-
+    /**
+     * 确定修改事件
+     */
     private static class Sure implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
@@ -85,7 +92,13 @@ public class GroupAddStage {
 
             groupHandle.add(new NoteGroup(name.getText(),master.getId()));
             name.setText("");
-            TextWindow.textWindow("成功添加！");
+            Stage stage = TextWindow.textWindow("成功添加！");
+            stage.setOnHidden(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    GroupAddStage.stage.close();
+                }
+            });
 
         }
     }
