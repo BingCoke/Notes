@@ -39,6 +39,7 @@ public class SearchAllUserPane {
     public static Pane getPane(User reader){
         SearchAllUserPane.reader = reader;
         //初始化
+        userAll.clear();
         userAll.addAll(userhandle.getBanUser());
         userAll.addAll(userhandle.getOrdinaryUser());
         ObservableList<String> list = FXCollections.observableArrayList();

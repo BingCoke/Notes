@@ -1,1 +1,2 @@
 1,mysql驱动包
+2，commons-codec jar包 用于MD5加密

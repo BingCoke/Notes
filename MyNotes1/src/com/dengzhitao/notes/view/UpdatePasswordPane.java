@@ -11,6 +11,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  * 密码修改界面
@@ -70,7 +71,7 @@ public class UpdatePasswordPane {
     private class PastPasswordJudge implements EventHandler<Event>{
         @Override
         public void handle(Event event) {
-            if(!user.getPassword().equals(pastPassword.getText())){
+            if(!user.getPassword().equals(DigestUtils.md5Hex(pastPassword.getText()))){
                 pastPasswordJudge.setText("并不是旧密码哦！");
             } else {
                 pastPasswordJudge.setText("");
@@ -99,10 +100,11 @@ public class UpdatePasswordPane {
     private class SuerClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
-            if(!(password.getText().equals(passwordAgain.getText())) || !user.getPassword().equals(password.getText())){
+            if(!"".equals(passwordJudge.getText()) || !"".equals(pastPasswordJudge.getText())){
                 TextWindow.textWindow("请检查信息正确性o");
             } else {
                 TextWindow.textWindow("更改密码成功！");
+                user.setPassword(DigestUtils.md5Hex(password.getText()));
                 new Userhandle().update(user);
                 pastPassword.setText("");
                 password.setText("");

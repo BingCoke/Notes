@@ -26,7 +26,6 @@ public class InformationPane {
 
     private  BorderPane root = new BorderPane();
     private  TextField username1 = new TextField();
-    private  TextField password1 = new TextField();
     private  TextField name1 = new TextField();
     private  ChoiceBox gender2 = new ChoiceBox() ;
     private  TextField gender1 = new TextField();
@@ -65,7 +64,6 @@ public class InformationPane {
 
         //信息初始化
         username1.setText(master.getUsername());
-        password1.setText(master.getPassword());
         name1.setText(master.getName());
         gender1.setText(master.getGender());
         age1.setText(String.valueOf(master.getAge()));
@@ -118,10 +116,6 @@ public class InformationPane {
         Button save = new Button("保存");
         Text isBan = new Text("");
 
-        //管理专有
-        Text password = new Text("密码");
-
-
 
         //加入控件
         if(reader.getPower() == 3){
@@ -129,11 +123,8 @@ public class InformationPane {
 
             gridPane.add(gender1,1,2);
             gridPane.add(age1,1,3);
-            gridPane.add(password,0,5);
-            gridPane.add(password1,1,5);
             age1.setEditable(false);
             gender1.setEditable(false);
-            password1.setEditable(false);
             name1.setEditable(false);
             phoneNumber1.setEditable(false);
         }else if(reader.getId() == master.getId()){

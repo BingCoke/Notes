@@ -74,7 +74,7 @@ public class CommentPane {
             }
             Stage stage = ReplyStage.getStage(reader,userComments.get(i));
             stage.show();
-            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            stage.setOnHidden(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent event) {
                     commentFlush();
@@ -100,6 +100,9 @@ public class CommentPane {
      */
     private void commentFlush(){
         userComments = userCommentHandle.getAll();
+        if(userComments.size() == 0){
+            return;
+        }
         ObservableList<String> observableList = FXCollections.observableArrayList();
         for (UserComment userComment : userComments) {
             User user = userhandle.getById(userComment.getUserId());

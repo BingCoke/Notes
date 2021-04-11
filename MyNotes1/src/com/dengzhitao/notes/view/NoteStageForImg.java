@@ -346,15 +346,18 @@ public class NoteStageForImg {
             pages.get(pageCount).setCount(webEngine.executeScript(js + ".innerText").toString().length());
 
             note.setName(title.getText());
-            noteHandle.add(note);
+
             pageHandle.saveAll(pages,initpage,type);
             if(type.equals("add")){
+                noteHandle.add(note);
                 type = "save";
+            } else {
+                noteHandle.save(note);
             }
             //字数改一下
             wordCount.setText("字数：" + noteHandle.wordCount(note));
             initpage = note.getPage();
-
+            System.out.println(initpage);
         }
     }
 
@@ -364,6 +367,9 @@ public class NoteStageForImg {
     private static class RemoveClick implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
+            if(type.equals("add")){
+                return;
+            }
             noteHandle.remove(note);
             pageHandle.removeAll(pages);
             stage.hide();
