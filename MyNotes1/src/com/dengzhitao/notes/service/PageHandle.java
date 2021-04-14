@@ -50,7 +50,7 @@ public class PageHandle implements Handle<Page> {
                 break;
             case "save":
                 int i ;
-                for (i = 0; i < initpage; i++) {
+                for (i = 0; i < initpage && i < pages.size(); i++) {
                     save(pages.get(i));
                 }
                 for (;i<pages.size();i++){

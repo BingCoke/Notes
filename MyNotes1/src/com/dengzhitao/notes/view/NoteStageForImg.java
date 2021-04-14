@@ -258,8 +258,8 @@ public class NoteStageForImg {
     private static class RemovePage implements EventHandler<ActionEvent>{
         @Override
         public void handle(ActionEvent event) {
-                int i = pagination.getCurrentPageIndex();
-                note.setPage(note.getPage() - 1);
+                int i = note.getPage() - 1;
+                note.setPage(i);
                 pagination.setPageCount(note.getPage());
 
         }
@@ -348,6 +348,7 @@ public class NoteStageForImg {
             note.setName(title.getText());
 
             pageHandle.saveAll(pages,initpage,type);
+
             if(type.equals("add")){
                 noteHandle.add(note);
                 type = "save";
