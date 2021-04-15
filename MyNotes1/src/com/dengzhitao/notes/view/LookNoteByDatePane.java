@@ -26,23 +26,8 @@ public class LookNoteByDatePane {
     private List<Note> notes;
     public Pane getPane(User reader){
         this.reader = reader;
-        ObservableList<String> observableList = FXCollections.observableArrayList();
+        noteFlush();
 
-        if(reader.getPower() == 3){
-            notes = noteHandle.getAllNotesByDate();
-        } else {
-           notes = noteHandle.getOpenNotesByDate(reader);
-        }
-
-        for (Note note : notes) {
-            observableList.add(note.getName());
-        }
-
-
-        listView.setOnMouseClicked(new ViewClick());
-
-
-        listView.setItems(observableList);
         root.setCenter(listView);
         return root;
     }
@@ -74,10 +59,15 @@ public class LookNoteByDatePane {
      * 笔记刷新
      */
     public void noteFlush(){
-        notes = noteHandle.getAllNotesByDate();
         ObservableList<String> observableList = FXCollections.observableArrayList();
+
+        if(reader.getPower() == 3){
+            notes = noteHandle.getAllNotesByDate();
+        } else {
+            notes = noteHandle.getOpenNotesByDate(reader);
+        }
         for (Note note : notes) {
-            observableList.add(note.getName() + " 点赞数:" + String.valueOf(noteHandle.likeCount(note)));
+            observableList.add(note.getName());
         }
         listView.setItems(observableList);
     }

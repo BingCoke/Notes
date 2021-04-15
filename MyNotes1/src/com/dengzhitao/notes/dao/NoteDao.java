@@ -165,7 +165,7 @@ public class NoteDao extends BaseDaoImpl<Note> {
         List<Note> notes = new ArrayList<>();
         try {
             preparedStatement = connection.prepareStatement("SELECT *,count(t.id) count from" +
-                    "(SELECT * FROM note where repository_id in (SELECT id from repository WHERE open=1  and open=1) union" +
+                    "(SELECT * FROM note where repository_id in (SELECT id from repository WHERE open=1)  and open=1 union" +
                     " SELECT * from note where repository_id in (SELECT id from repository WHERE repository.user_id = " + String.valueOf(reader.getId()) +")) " +
                     " t " +
                     "left JOIN" +
