@@ -163,16 +163,28 @@ public class NoteDao extends BaseDaoImpl<Note> {
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
         List<Note> notes = new ArrayList<>();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("(SELECT *,count(t.id) count from" +
+                "(SELECT * FROM note where repository_id in (SELECT id from repository WHERE open=1)  and open=1 union" +
+                " SELECT * from note where repository_id in (SELECT id from repository WHERE repository.user_id = " + String.valueOf(reader.getId()) +")) " +
+                " t " +
+                " JOIN" +
+                " likes " +
+                "on t.id=likes.note_id" +
+                " GROUP BY t.id " +
+                "order by count DESC)");
+        stringBuilder.append(" union ");
+         stringBuilder.append("(SELECT *,count(t.id) count from" +
+                 "(SELECT * FROM note where repository_id in (SELECT id from repository WHERE open=1)  and open=1 union" +
+                 " SELECT * from note where repository_id in (SELECT id from repository WHERE repository.user_id = " + String.valueOf(reader.getId()) +")) " +
+                 " t " +
+                 "left JOIN" +
+                 " likes " +
+                 "on t.id=likes.note_id" +
+                 " GROUP BY t.id " +
+                 "order by count DESC)");
         try {
-            preparedStatement = connection.prepareStatement("SELECT *,count(t.id) count from" +
-                    "(SELECT * FROM note where repository_id in (SELECT id from repository WHERE open=1)  and open=1 union" +
-                    " SELECT * from note where repository_id in (SELECT id from repository WHERE repository.user_id = " + String.valueOf(reader.getId()) +")) " +
-                    " t " +
-                    "left JOIN" +
-                    " likes " +
-                    "on t.id=likes.note_id" +
-                    " GROUP BY t.id " +
-                    "order by count DESC");
+            preparedStatement = connection.prepareStatement(stringBuilder.toString());
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
                 Note note = new Note(
@@ -357,12 +369,19 @@ public class NoteDao extends BaseDaoImpl<Note> {
         PreparedStatement preparedStatement = null;
         List<Note> notes = new ArrayList<>();
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("SELECT *,count(t.id) count from (SELECT * FROM note where id in (");
+        stringBuilder.append("(SELECT *,count(t.id) count from (SELECT * FROM note where id in (");
         for (Note note : noteList) {
             stringBuilder.append(note.getId()).append(",");
         }
         stringBuilder.replace(stringBuilder.length()-1,stringBuilder.length(),")");
-        stringBuilder.append(") t  left JOIN likes on t.id=likes.note_id GROUP BY t.id order by count DESC");
+        stringBuilder.append(") t  JOIN likes on t.id=likes.note_id GROUP BY t.id order by count DESC)");
+        stringBuilder.append(" union ");
+        stringBuilder.append("(SELECT *,count(t.id) count from (SELECT * FROM note where id in (");
+        for (Note note : noteList) {
+            stringBuilder.append(note.getId()).append(",");
+        }
+        stringBuilder.replace(stringBuilder.length()-1,stringBuilder.length(),")");
+        stringBuilder.append(") t  left JOIN likes on t.id=likes.note_id GROUP BY t.id order by count DESC)");
         try {
             preparedStatement = connection.prepareStatement(stringBuilder.toString());
             resultSet = preparedStatement.executeQuery();

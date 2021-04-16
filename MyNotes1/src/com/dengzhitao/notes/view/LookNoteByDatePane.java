@@ -28,6 +28,10 @@ public class LookNoteByDatePane {
         this.reader = reader;
         noteFlush();
 
+        listView.setOnMouseClicked(new ViewClick());
+
+
+
         root.setCenter(listView);
         return root;
     }
